@@ -1,3 +1,13 @@
+// redirect to home page if user logged in
+window.onload = () => {
+     if (sessionStorage.user) {
+          user = JSON.parse(sessionStorage.user);
+          if (compareToken(user.authToken, user.email)) {
+               location.replace('/');
+          }
+     }
+}
+
 const loader = document.querySelector('.loader');
 
 // select inputs
@@ -53,6 +63,11 @@ const processData = (data) => {
      loader.style.display = null;
      if (data.alert) {
           showAlert(data.alert);
+     } else if (data.name) {
+          // create authToken
+          data.authToken = generateToken(data.email);
+          sessionStorage.user = JSON.stringify(data);
+          location.replace('/');
      }
 }
 

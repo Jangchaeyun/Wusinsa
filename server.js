@@ -4,6 +4,15 @@ const admin = require('firebase-admin');
 const bcrypt = require('bcrypt');
 const path = require('path');
 
+// firebase admin setup
+var serviceAccount = require("./wusinsa-firebase-adminsdk-zi5om-345fa90dfe.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+let db = admin.firestore();
+
 // declare static path
 let staticPath = path.join(__dirname, "public");
 
@@ -38,13 +47,34 @@ app.post('/signup', (req, res) => {
           return res.json({ 'alert': '비밀번호는 8글자 이상 입력해야 합니다.' })
      } else if (!number.length) {
           return res.json({ 'alert': '휴대폰 번호를 입력해주세요.' })
-     } else if (!Number(number.value) || number.length < 10) {
-          return res.json({ 'alert': '잘못된 번호입니다. 유효한 번호를 입력하세요.' })
-     } else if (!tac.checked) {
+     } else if (!Number(number) || number.length < 10) {
+          return res.json({ 'alert': '잘못된 휴대폰 번호입니다. 유효한 번호를 입력하세요.' })
+     } else if (!tac) {
           return res.json({ 'alert': '이용 약관에 동의해야 합니다.' });
-     } else {
-          // store user in db
      }
+
+     // store user in db
+     db.collection('users').doc(email).get()
+     .then(user => {
+          if (user.exists) {
+               return res.json({'alert' : '이메일이 이미 존재합니다.'})
+          } else {
+               // encrypt the password before storing it.
+               bcrypt.genSalt(10, (err, salt) => {
+                    bcrypt.hash(password, salt, (err, hash) => {
+                         req.body.password = hash;
+                         db.collection('users').doc(email).set(req.body)
+                         .then(data => {
+                              res.json({
+                                   name: req.body.name,
+                                   email: req.body.email,
+                                   seller: req.body.seller,
+                              })
+                         })
+                    })
+               })
+          }
+     })
 })
 
 // 404 route
