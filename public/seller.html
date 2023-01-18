@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>판매자 대시보드</title>
+
+     <link rel="stylesheet" href="css/signup.css">
+     <link rel="stylesheet" href="css/seller.css">
+</head>
+<body>
+     <img src="img/loader.gif" class="loader" alt="">
+
+     <div class="alert-box">
+          <img src="img/error.png" class="alert-img" alt="">
+          <p class="alert-msg">에러 메시지</p>
+     </div>
+
+     <img src="img/dark-logo.png" class="logo" alt="">
+
+     <!-- become seller element -->
+     <div class="become-seller hide">
+          <p class="heading">판매자가 되기</p>
+          <p class="des">가입하신 모든 회원분들은 판매자 계정 신청한 후 관리자의 승인만 받으시면 판매자가 될 수 있습니다.</p>
+          <button class="btn" id="apply-btn">판매자 계정 신청</button>
+     </div>
+
+     <!-- apply form -->
+     <div class="apply-form hide">
+          <input type="text" id="business-name" placeholder="비지니스 / 회사 / 샵 이름">
+          <textarea id="business-add" placeholder="주소"></textarea>
+          <textarea id="about" placeholder="대해서"></textarea>
+          <input type="text" id="number" placeholder="전화번호">
+          <input type="checkbox" checked class="checkbox" id="terms-and-cond">
+          <label for="terms-and-cond">우리의 <a href="">이용 약관</a>에 동의</label>
+          <br/>
+          <input type="checkbox" checked class="checkbox" id="legitInfo">
+          <label for="notification">모든 정보는 합법적입니다.</label>
+          <button class="submit-btn" id="apply-form-btn">신청</button>
+     </div>
+
+     <!-- products list -->
+     <div class="product-listing">
+          <div class="add-product">
+               <p class="add=product-title">제품 추가</p>
+               <button class="btn">제품 추가</button>
+          </div>
+          <img src="img/no-products.png" class="no-product-image" alt="">
+     </div>
+
+     <script src="js/token.js"></script>
+     <script src="js/seller.js"></script>
+</body>
+</html>

@@ -110,6 +110,30 @@ app.post('/login', (req, res) => {
      })
 })
 
+// seller route
+app.get('/seller', (req, res) => { 
+     res.sendFile(path.join(staticPath, "seller.html"))
+})
+
+app.post('/seller', (req, res) => {
+     let { name, about, address, number, tac, legit, email } = req.body;
+     if (!name.length || !address.length || !about.length || number.length < 10 || !Number(number)) {
+          return res.json({ 'alert': '일부 정보는 유효하지 않습니다.' });
+     } else if (!tac || !legit) {
+          return res.json({'alert' : '이용 약관에 동의해야 합니다.'})
+     } else {
+          // update users seller status here.
+          db.collection('sellers').doc(email).set(req.body)
+          .then(data => {
+               db.collection('users').doc(email).update({
+                    seller: true
+               }).then(data => {
+                    res.json(true);
+               })
+          })
+     }
+})
+
 // 404 route
 app.get('/404', (req, res) => {
      res.sendFile(path.join(staticPath, "404.html"));
