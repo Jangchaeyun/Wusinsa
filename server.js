@@ -13,6 +13,44 @@ admin.initializeApp({
 
 let db = admin.firestore();
 
+// aws config
+const aws = require('aws-sdk');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+// aws parameters
+const region = "ap-northeast-2";
+const bucketName = "wusinsa";
+const accessKeyId = process.env.AWS_ACCESS_KEY;
+const secretAccessKey = process.env.AWS_SECRET_KEY;
+
+aws.config.update({
+     region,
+     accessKeyId,
+     secretAccessKey
+})
+
+// init s3
+const s3 = new aws.S3();
+
+// generate image upload link
+async function generateUrl() {
+     let date = new Date();
+     let id = parseInt(Math.random() * 1000000000);
+
+     const imageName = `${id}${date.getTime()}.jpg`;
+
+     const params = ({
+          Bucket: bucketName,
+          Key: imageName,
+          Expires: 300,
+          ContentType: 'image/jpeg'
+     })
+     const uploadUrl = await s3.getSignedUrlPromise('putObject', params);
+     return uploadUrl;
+}
+
 // declare static path
 let staticPath = path.join(__dirname, "public");
 
@@ -132,6 +170,52 @@ app.post('/seller', (req, res) => {
                })
           })
      }
+})
+
+// add product
+app.get('/add-product', (req, res) => {
+     res.sendFile(path.join(staticPath, "addProduct.html"))
+})
+
+// get the upload link
+app.get('/s3url', (req, res) => {
+     generateUrl().then(url => res.json(url));
+})
+
+// add product
+app.post('/add-product', (req, res) => {
+     let { name, shortDes, des, images, sizes, actualPrice, discount, sellPrice, stock, tags, tac, email } = req.body;
+
+     // validation
+     if (!name.length) {
+          return res.json({ 'alert' : '제품 이름을 입력'});
+     } else if (shortDes.length > 100 || shortDes.length < 10) {
+          return res.json({'alert': '짧은 제품 설명은 10 ~ 1000자 사이로 작성.'});
+     } else if (!des.length) {
+          return res.json({'alert' : '제품에 대한 상세 설명 입력'});
+     } else if (!images.length) { // image link array
+          return res.json({ 'alert' : '하나 이상의 제품 이미지 업로드'});
+     } else if (!sizes.length) { // size array
+          return res.json({'alert' : '하나 이상의 크기를 선택'})
+     } else if (!actualPrice.length || !discount.length || !sellPrice.length) {
+          return res.json({'alert' : '가격을 추가'});
+     } else if (stock < 20) {
+          return res.json({'alert' : '재고가 20개 이상 있어야 합니다.'});
+     } else if (!tags.length) {
+          return res.json({'alert' : '검색에서 제품 순위를 지정하는 데 도움이 되는 몇 가지 태그를 입력'});
+     } else if (!tac) {
+          return res.json({'alert' : '이용 약관에 동의해야 합니다.'});
+     }
+
+     // add product
+     let docName = `${name.toLowerCase()}-${Math.floor(Math.random() * 5000)}`;
+     db.collection('products').doc(docName).set(req.body)
+     .then(data => {
+          res.json({ 'product': name });
+     })
+     .catch(err => {
+          return res.json({ 'alert': '일부 오류가 발생했습니다. 다시 시도하십시오' });
+     })
 })
 
 // 404 route

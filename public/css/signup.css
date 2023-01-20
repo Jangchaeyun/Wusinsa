@@ -15,7 +15,7 @@ body {
 }
 
 .loader {
-     position: absolute;
+     position: fixed;
      top: 50%;
      left: 50%;
      transform: translate(-50%, -50%);
@@ -32,6 +32,7 @@ body {
 input[type="text"],
 input[type="password"],
 input[type="email"],
+input[type="number"],
 textarea {
      display: block;
      width: 300px;
@@ -128,7 +129,7 @@ label a {
      background: #fff;
      border-radius: 10px;
      box-sizing: 0 5px 100px rgba(0, 0, 0, 0.05);
-     position: absolute;
+     position: fixed;
      top: 60%;
      left: 50%;
      transform: translate(-50%, -50%);
@@ -136,6 +137,7 @@ label a {
      opacity: 0;
      pointer-events: none;
      transition: 1s;
+     z-index: 2;
 }
 
 .alert-box.show {

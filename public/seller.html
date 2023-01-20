@@ -6,6 +6,8 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <title>판매자 대시보드</title>
 
+     <link rel="stylesheet" href="css/home.css">
+     <link rel="stylesheet" href="css/search.css">
      <link rel="stylesheet" href="css/signup.css">
      <link rel="stylesheet" href="css/seller.css">
 </head>
@@ -43,10 +45,27 @@
      <!-- products list -->
      <div class="product-listing">
           <div class="add-product">
-               <p class="add=product-title">제품 추가</p>
-               <button class="btn">제품 추가</button>
+               <p class="add-product-title">제품 추가</p>
+               <button class="btn" onclick="location.href = 'add-product'">제품 추가</button>
           </div>
-          <img src="img/no-products.png" class="no-product-image" alt="">
+          <img src="img/no-products.png" class="no-product-image hide" alt="">
+
+          <!-- cards -->
+          <div class="product-container">
+               <div class="product-card">
+                    <div class="product-image">
+                         <span class="tag">자켓</span>
+                         <img src="img/card1.png" class="product-thumb" alt="">
+                         <button class="card-action-btn edit"></button>
+                    </div>
+                    <div class="product-info">
+                         <h2 class="product-brand">카네이테이</h2>
+                         <p class="product-short-des">커시브 로고 하프집업 (네이비)</p>
+                         <span class="price">69,500원</span>
+                         <span class="actual-price">139,000원</span>
+                    </div>
+               </div>
+          </div>
      </div>
 
      <script src="js/token.js"></script>
