@@ -143,3 +143,17 @@ addProductBtn.addEventListener('click', () => {
           sendData('/add-product', data);
      }
 })
+
+// save draft btn
+saveDraft.addEventListener('click', () => {
+     // store sizes
+     storeSizes();
+     // check for product name
+     if (!productName.value.length) {
+          showAlert('제품명 입력')
+     } else { // don't validate the data
+          let data = productData();
+          data.draft = true;
+          sendData('/add-product', data);
+     }
+})

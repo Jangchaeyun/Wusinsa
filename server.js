@@ -184,13 +184,13 @@ app.get('/s3url', (req, res) => {
 
 // add product
 app.post('/add-product', (req, res) => {
-     let { name, shortDes, des, images, sizes, actualPrice, discount, sellPrice, stock, tags, tac, email } = req.body;
+     let { name, shortDes, des, images, sizes, actualPrice, discount, sellPrice, stock, tags, tac, email, draft } = req.body;
 
      // validation
      if (!name.length) {
           return res.json({ 'alert' : '제품 이름을 입력'});
-     } else if (shortDes.length > 100 || shortDes.length < 10) {
-          return res.json({'alert': '짧은 제품 설명은 10 ~ 1000자 사이로 작성.'});
+     } else if (shortDes.length > 100 || shortDes.length < 2) {
+          return res.json({'alert': '짧은 제품 설명은 2 ~ 100자 사이로 작성.'});
      } else if (!des.length) {
           return res.json({'alert' : '제품에 대한 상세 설명 입력'});
      } else if (!images.length) { // image link array
@@ -215,6 +215,37 @@ app.post('/add-product', (req, res) => {
      })
      .catch(err => {
           return res.json({ 'alert': '일부 오류가 발생했습니다. 다시 시도하십시오' });
+     })
+})
+
+// get products
+app.post('/get-products', (req, res) => {
+     let { email } = req.body;
+     let docRef = db.collection('products').where('email', '==', email);
+
+     docRef.get()
+     .then(products => {
+          if (products.empty) {
+               return res.json('제품이 없습니다.')
+          }
+          let productArr = [];
+          products.forEach(item => {
+               let data = item.data();
+               data.id = item.id;
+               productArr.push(data);
+          })
+          res.json(productArr)
+     })
+})
+
+app.post('/delete-product', (req, res) => {
+     let { id } = req.body;
+
+     db.collection('products').doc(id).delete()
+     .then(data => {
+          res.json('success');
+     }).catch(err => {
+          res.json('err');
      })
 })
 
