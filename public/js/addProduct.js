@@ -36,31 +36,28 @@ sellingPrice.addEventListener('input', () => {
 let uploadImages = document.querySelectorAll('.fileupload');
 let imagePaths = []; // will store all uploaded imagea paths
 
-fetch('/s3url').then(res => res.json())
-.then(url => console.log(url));
-
 uploadImages.forEach((fileupload, index) => {
      fileupload.addEventListener('change', () => {
-          const file = fileupload.files[0];
-          let imageUrl;
-
-          if (file.type.includes('image')) {
-               //  means user uploaded an image
-               fetch('/s3url').then(res => res.json())
-               .then(url => {
-                    fetch(url, {
-                         method: 'PUT',
-                         headers: new Headers({ 'Content-Type': 'multipart/form-data' }),
-                         body: file
-                    }).then(res => {
-                         imageUrl = url.split("?")[0];
-                         imagePaths[index] = imageUrl;
-                         let label = document.querySelector(`label[for=${fileupload.id}]`);
-                         label.style.backgroundImage = `url(${imageUrl})`;
-                         let productImage = document.querySelector('.product-image');
-                         productImage.style.backgroundImage = `url(${imageUrl})`;
-                    })
-               })
+         const file = fileupload.files[0];
+         let imageUrl;
+ 
+         if(file.type.includes('image')){
+             // means user uploaded an image
+             fetch('/s3url').then(res => res.json())
+             .then(url => {
+                 fetch(url,{
+                     method: 'PUT',
+                     headers: new Headers({'Content-Type': 'multipart/form-data'}),
+                     body: file
+                 }).then(res => {
+                     imageUrl = url.split("?")[0];
+                     imagePaths[index] = imageUrl;
+                     let label = document.querySelector(`label[for=${fileupload.id}]`);
+                     label.style.backgroundImage = `url(${imageUrl})`;
+                     let productImage = document.querySelector('.product-image');
+                     productImage.style.backgroundImage = `url(${imageUrl})`;
+                 })
+             })
           } else {
                showAlert('이미지만 업로드')
           }
@@ -140,6 +137,9 @@ addProductBtn.addEventListener('click', () => {
      if (validateForm()) { // validateForm return true or false while doing validation
           loader.style.display = 'block';
           let data = productData();
+          if(productId){
+               data.id = productId;
+          }
           sendData('/add-product', data);
      }
 })
@@ -157,3 +157,62 @@ saveDraft.addEventListener('click', () => {
           sendData('/add-product', data);
      }
 })
+
+// existing product detail handle
+const setFormsData = (data) => {
+     productName.value = data.name;
+     shortLine.value = data.shortDes;
+     des.value = data.des;
+     actualPrice.value = data.actualPrice;
+     discountPercentage.value = data.discount;
+     sellingPrice.value = data.sellPrice;
+     stock.value = data.stock;
+     tags.value = data.tags;
+
+     // set up images
+     imagePaths = data.images;
+     imagePaths.forEach((url, i) => {
+          let label = document.querySelector(`label[for=${uploadImages[i].id}]`);
+          label.style.backgroundImage = `url(${url})`;
+          let productImage = document.querySelector('.product-image');
+          productImage.style.backgroundImage = `url(${url})`;
+     })
+
+     // setup sizes
+     sizes = data.sizes;
+     
+     let sizeCheckbox = document.querySelectorAll('.size-checkbox');
+     sizeCheckbox.forEach(item => {
+          if (sizes.includes(item.value)) {
+               item.setAttribute('checked', '');
+          }
+     })
+}
+
+const fetchProductData = () => {
+     // delete the tempProduct from the session
+     delete sessionStorage.tempProduct;
+     fetch('/get-products', {
+          method: 'post',
+          headers: new Headers({ 'Content-Type': 'application/json' }),
+          body: JSON.stringify({email: user.email, id: productId})
+     })
+     .then((res) => res.json())
+     .then(data => {
+          setFormsData(data);
+     })
+     .catch(err => {
+          console.log(err);
+     })
+}
+
+let productId = null;
+if (location.pathname != '/add-product') {
+     productId = decodeURI(location.pathname.split('/').pop());
+
+     let productDetail = JSON.parse(sessionStorage.tempProduct || null);
+     // fetch the data if product is not in sesion
+     // if (productDetail == null) {
+          fetchProductData();
+     // }
+}

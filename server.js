@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 
 // firebase admin setup
-var serviceAccount = require("./wusinsa-firebase-adminsdk-zi5om-345fa90dfe.json");
+let serviceAccount = require("./wusinsa-firebase-adminsdk-zi5om-345fa90dfe.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
@@ -26,10 +26,10 @@ const accessKeyId = process.env.AWS_ACCESS_KEY;
 const secretAccessKey = process.env.AWS_SECRET_KEY;
 
 aws.config.update({
-     region,
-     accessKeyId,
+     region, 
+     accessKeyId, 
      secretAccessKey
-})
+ })
 
 // init s3
 const s3 = new aws.S3();
@@ -177,6 +177,10 @@ app.get('/add-product', (req, res) => {
      res.sendFile(path.join(staticPath, "addProduct.html"))
 })
 
+app.get('/add-product/:id', (req, res) => {
+     res.sendFile(path.join(staticPath, "addProduct.html"))
+})
+
 // get the upload link
 app.get('/s3url', (req, res) => {
      generateUrl().then(url => res.json(url));
@@ -184,31 +188,33 @@ app.get('/s3url', (req, res) => {
 
 // add product
 app.post('/add-product', (req, res) => {
-     let { name, shortDes, des, images, sizes, actualPrice, discount, sellPrice, stock, tags, tac, email, draft } = req.body;
+     let { name, shortDes, des, images, sizes, actualPrice, discount, sellPrice, stock, tags, tac, email, draft, id } = req.body;
 
      // validation
-     if (!name.length) {
-          return res.json({ 'alert' : '제품 이름을 입력'});
-     } else if (shortDes.length > 100 || shortDes.length < 2) {
-          return res.json({'alert': '짧은 제품 설명은 2 ~ 100자 사이로 작성.'});
-     } else if (!des.length) {
-          return res.json({'alert' : '제품에 대한 상세 설명 입력'});
-     } else if (!images.length) { // image link array
-          return res.json({ 'alert' : '하나 이상의 제품 이미지 업로드'});
-     } else if (!sizes.length) { // size array
-          return res.json({'alert' : '하나 이상의 크기를 선택'})
-     } else if (!actualPrice.length || !discount.length || !sellPrice.length) {
-          return res.json({'alert' : '가격을 추가'});
-     } else if (stock < 20) {
-          return res.json({'alert' : '재고가 20개 이상 있어야 합니다.'});
-     } else if (!tags.length) {
-          return res.json({'alert' : '검색에서 제품 순위를 지정하는 데 도움이 되는 몇 가지 태그를 입력'});
-     } else if (!tac) {
-          return res.json({'alert' : '이용 약관에 동의해야 합니다.'});
-     }
+     if (!draft) {
+          if (!name.length) {
+               return res.json({ 'alert' : '제품 이름을 입력'});
+          } else if (shortDes.length > 100 || shortDes.length < 2) {
+               return res.json({'alert': '짧은 제품 설명은 2 ~ 100자 사이로 작성.'});
+          } else if (!des.length) {
+               return res.json({'alert' : '제품에 대한 상세 설명 입력'});
+          } else if (!images.length) { // image link array
+               return res.json({ 'alert' : '하나 이상의 제품 이미지 업로드'});
+          } else if (!sizes.length) { // size array
+               return res.json({'alert' : '하나 이상의 크기를 선택'})
+          } else if (!actualPrice.length || !discount.length || !sellPrice.length) {
+               return res.json({'alert' : '가격을 추가'});
+          } else if (stock < 20) {
+               return res.json({'alert' : '재고가 20개 이상 있어야 합니다.'});
+          } else if (!tags.length) {
+               return res.json({'alert' : '검색에서 제품 순위를 지정하는 데 도움이 되는 몇 가지 태그를 입력'});
+          } else if (!tac) {
+               return res.json({'alert' : '이용 약관에 동의해야 합니다.'});
+          }
+    }
 
      // add product
-     let docName = `${name.toLowerCase()}-${Math.floor(Math.random() * 5000)}`;
+     let docName = id == undefined ? `${name.toLowerCase()}-${Math.floor(Math.random() * 5000)}` : id;
      db.collection('products').doc(docName).set(req.body)
      .then(data => {
           res.json({ 'product': name });
@@ -220,8 +226,8 @@ app.post('/add-product', (req, res) => {
 
 // get products
 app.post('/get-products', (req, res) => {
-     let { email } = req.body;
-     let docRef = db.collection('products').where('email', '==', email);
+     let { email, id } = req.body;
+     let docRef = id ? db.collection('products').doc(id) : db.collection('products').where('email', '==', email);
 
      docRef.get()
      .then(products => {
@@ -229,12 +235,16 @@ app.post('/get-products', (req, res) => {
                return res.json('제품이 없습니다.')
           }
           let productArr = [];
-          products.forEach(item => {
-               let data = item.data();
-               data.id = item.id;
-               productArr.push(data);
-          })
-          res.json(productArr)
+          if (id) {
+               return res.json(products.data());
+          } else {
+               products.forEach(item => {
+                    let data = item.data();
+                    data.id = item.id;
+                    productArr.push(data);
+               })
+               res.json(productArr)
+          }
      })
 })
 
