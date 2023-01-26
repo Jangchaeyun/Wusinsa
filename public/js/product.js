@@ -16,12 +16,14 @@ productImages.forEach((item, i) => {
 
 const sizeBtns = document.querySelectorAll('.size-radio-btn');
 let checkedBtn = 0;
+let size;
 
 sizeBtns.forEach((item, i) => {
      item.addEventListener('click', () => {
           sizeBtns[checkedBtn].classList.remove('check');
           item.classList.add('check');
           checkedBtn = i;
+          size = item.innerHTML;
      })
 })
 
@@ -62,6 +64,17 @@ const setData = (data) => {
      sellPrice.innerHTML = `${data.sellPrice}원`;
      actualPrice.innerHTML = `${data.actualPrice}원`;
      discount.innerHTML = `( ${data.discount}% 할인 )`;
+
+     // wishlist and cart btn
+     const wishlistBtn = document.querySelector('.wishlist-btn');
+     wishlistBtn, addEventListener('click', () => {
+          wishlistBtn.innerHTML = add_product_to_cart_or_wishlist('wishlist', data);
+     })
+
+     const cartBtn = document.querySelector('.cart-btn');
+     cartBtn, addEventListener('click', () => {
+          cartBtn.innerHTML = add_product_to_cart_or_wishlist('cart', data);
+     })
 }
 
 // fetch data

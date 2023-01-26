@@ -6,126 +6,23 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <title>검색 결과</title>
 
-     <link rel="stylesheet" href="css/home.css">
-     <link rel="stylesheet" href="css/search.css">
+     <link rel="stylesheet" href="../css/home.css">
+     <link rel="stylesheet" href="../css/search.css">
 </head>
 <body>
      <nav class="navbar"></nav>
 
      <section class="search-results">
-          <h2 class="heading"><span>제품</span> 검색 결과</h2>
+          <h2 class="heading"><span id="search-key"></span> 검색 결과</h2>
+          <section class="card-container"></section>
      </section>
 
-     <div class="product-container">
-          <div class="product-card">
-               <div class="product-image">
-                    <span class="discount-tag">37% 할인</span>
-                    <img src="img/card25.png" class="product-thumb" alt="">
-                    <button class="card-btn">위시리스트 추가</button>
-               </div>
-               <div class="product-info">
-                    <h2 class="product-brand">라퍼지스토어</h2>
-                    <p class="product-short-des">덕다운 심리스 미니멀 푸퍼 숏패딩_Black</p>
-                    <span class="price">85,405원</span>
-                    <span class="actual-price">143,000원</span>
-               </div>
-          </div>
-          <div class="product-card">
-               <div class="product-image">
-                    <span class="discount-tag">9% 할인</span>
-                    <img src="img/card26.png" class="product-thumb" alt="">
-                    <button class="card-btn">위시리스트 추가</button>
-               </div>
-               <div class="product-info">
-                    <h2 class="product-brand">스파오</h2>
-                    <p class="product-short-des"> 파스텔 푸퍼_SPJPC4TG01</p>
-                    <span class="price">45,688원</span>
-                    <span class="actual-price">69,900원</span>
-               </div>
-          </div>
-          <div class="product-card">
-               <div class="product-image">
-                    <span class="discount-tag">50% 할인</span>
-                    <img src="img/card27.png" class="product-thumb" alt="">
-                    <button class="card-btn">위시리스트 추가</button>
-               </div>
-               <div class="product-info">
-                    <h2 class="product-brand">후아유</h2>
-                    <p class="product-short-des">리버서블 덤블 숏푸퍼 WHJPD1192U y</p>
-                    <span class="price">59,383원</span>
-                    <span class="actual-price">129,000원</span>
-               </div>
-          </div>
-          <div class="product-card">
-               <div class="product-image">
-                    <span class="discount-tag">45% 할인</span>
-                    <img src="img/card28.png" class="product-thumb" alt="">
-                    <button class="card-btn">위시리스트 추가</button>
-               </div>
-               <div class="product-info">
-                    <h2 class="product-brand">에일</h2>
-                    <p class="product-short-des">(23SS) WARM+ UP QUILTING JACKET BLACK</p>
-                    <span class="price">54,450원</span>
-                    <span class="actual-price">99,000원</span>
-               </div>
-          </div>
-          <div class="product-card">
-               <div class="product-image">
-                    <span class="discount-tag">5% 할인</span>
-                    <img src="img/card29.png" class="product-thumb" alt="">
-                    <button class="card-btn">위시리스트 추가</button>
-               </div>
-               <div class="product-info">
-                    <h2 class="product-brand">노스페이스</h2>
-                    <p class="product-short-des">NJ1DN75A 남성 1996 에코 눕시 자켓</p>
-                    <span class="price">323,745원</span>
-                    <span class="actual-price">339,000원</span>
-               </div>
-          </div>
-          <div class="product-card">
-               <div class="product-image">
-                    <span class="discount-tag">48% 할인</span>
-                    <img src="img/card30.png" class="product-thumb" alt="">
-                    <button class="card-btn">위시리스트 추가</button>
-               </div>
-               <div class="product-info">
-                    <h2 class="product-brand">코드그라픽</h2>
-                    <p class="product-short-des">[DIVO] RDS 유틸리티 덕다운 푸파 숏패딩_쿨그레이</p>
-                    <span class="price">64,900원</span>
-                    <span class="actual-price">124,000원</span>
-               </div>
-          </div>
-          <div class="product-card">
-               <div class="product-image">
-                    <span class="discount-tag">37% 할인</span>
-                    <img src="img/card31.png" class="product-thumb" alt="">
-                    <button class="card-btn">위시리스트 추가</button>
-               </div>
-               <div class="product-info">
-                    <h2 class="product-brand">러퍼지스토어</h2>
-                    <p class="product-short-des">덕다운 심리스 미니멀 푸퍼 숏패딩_Soft Gray</p>
-                    <span class="price">85,405원</span>
-                    <span class="actual-price">143,000원</span>
-               </div>
-          </div>
-          <div class="product-card">
-               <div class="product-image">
-                    <span class="discount-tag">48% 할인</span>
-                    <img src="img/card32.png" class="product-thumb" alt="">
-                    <button class="card-btn">위시리스트 추가</button>
-               </div>
-               <div class="product-info">
-                    <h2 class="product-brand">러퍼지스토어</h2>
-                    <p class="product-short-des">덕다운 미니멀 블루종 패딩_Black </p>
-                    <span class="price">72,000원</span>
-                    <span class="actual-price">138,000원</span>
-               </div>
-          </div>
-     </div>
 
      <footer></footer>
 
-     <script src="js/nav.js"></script>
-     <script src="js/footer.js"></script>
+     <script src="../js/nav.js"></script>
+     <script src="../js/footer.js"></script>
+     <script src="../js/home.js"></script>
+     <script src="../js/search.js"></script>
 </body>
 </html>
