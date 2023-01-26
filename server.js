@@ -21,7 +21,7 @@ dotenv.config();
 
 // aws parameters
 const region = "ap-northeast-2";
-const bucketName = "wusinsa";
+const bucketName = "wusinsaweb";
 const accessKeyId = process.env.AWS_ACCESS_KEY;
 const secretAccessKey = process.env.AWS_SECRET_KEY;
 
@@ -226,8 +226,15 @@ app.post('/add-product', (req, res) => {
 
 // get products
 app.post('/get-products', (req, res) => {
-     let { email, id } = req.body;
-     let docRef = id ? db.collection('products').doc(id) : db.collection('products').where('email', '==', email);
+     let { email, id, tag } = req.body;
+
+     if (id) {
+          docRef = db.collection('products').doc(id)
+     } else if (tag) {
+          docRef = db.collection('products').where('tags', 'array-contains', tag)
+     } else {
+          docRef = db.collection('products').where('email', '==', email)
+     }
 
      docRef.get()
      .then(products => {
@@ -257,6 +264,11 @@ app.post('/delete-product', (req, res) => {
      }).catch(err => {
           res.json('err');
      })
+})
+
+// product page
+app.get('/products/:id', (req, res) => {
+     res.sendFile(path.join(staticPath, "product.html"));
 })
 
 // 404 route

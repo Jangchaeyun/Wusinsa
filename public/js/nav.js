@@ -3,20 +3,20 @@ const createNav = () => {
 
      nav.innerHTML = `
           <div class="nav">
-               <img src="img/dark-logo.png" class="brand-logo" alt="">
+               <img src="../img/dark-logo.png" class="brand-logo" alt="">
                <div class="nav-items">
                     <div class="search">
                          <input type="text" class="search-box" placeholder="검색">
                          <button class="search-btn">검색</button>
                     </div>
                     <a>
-                         <img src="img/user.png" id="user-img" alt="">
+                         <img src="../img/user.png" id="user-img" alt="">
                          <div class="login-logout-popup hide">
                               <p class="account-info">다음으로 로그인, 이름</p>
                               <button class="btn" id="user-btn">로그아웃</button>
                          </div>
                     </a>
-                    <a href="#"><img src="img/cart.png" alt=""></a>
+                    <a href="/cart"><img src="../img/cart.png" alt=""></a>
                </div>
           </div>
           <ul class="links-container">

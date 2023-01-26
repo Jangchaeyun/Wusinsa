@@ -94,7 +94,7 @@ const storeSizes = () => {
 const validateForm = () => {
      if (!productName.value.length) {
           return showAlert('제품 이름을 입력');
-     } else if (shortLine.value.length > 100 || shortLine.value.length < 10) {
+     } else if (shortLine.value.length > 100 || shortLine.value.length < 3) {
           return showAlert('짧은 제품 설명은 10 ~ 1000자 사이로 작성.');
      } else if (!des.value.length) {
           return showAlert('제품에 대한 상세 설명 입력');
@@ -115,6 +115,8 @@ const validateForm = () => {
 }
 
 const productData = () => {
+     let tagArr = tags.value.split(',');
+     tagArr.forEach((item, i) => tagArr[i] = tagArr[i].trim());
      return data = {
           name: productName.value,
           shortDes: shortLine.value,
@@ -125,7 +127,7 @@ const productData = () => {
           discount: discountPercentage.value,
           sellPrice: sellingPrice.value,
           stock: stock.value,
-          tags: tags.value,
+          tags:tagArr,
           tac: tac.checked,
           email: user.email
      }
@@ -190,8 +192,6 @@ const setFormsData = (data) => {
 }
 
 const fetchProductData = () => {
-     // delete the tempProduct from the session
-     delete sessionStorage.tempProduct;
      fetch('/get-products', {
           method: 'post',
           headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -210,9 +210,5 @@ let productId = null;
 if (location.pathname != '/add-product') {
      productId = decodeURI(location.pathname.split('/').pop());
 
-     let productDetail = JSON.parse(sessionStorage.tempProduct || null);
-     // fetch the data if product is not in sesion
-     // if (productDetail == null) {
-          fetchProductData();
-     // }
+     fetchProductData();
 }

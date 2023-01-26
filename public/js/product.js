@@ -24,3 +24,65 @@ sizeBtns.forEach((item, i) => {
           checkedBtn = i;
      })
 })
+
+const setData = (data) => {
+     let title = document.querySelector('title');
+
+     // setup the images
+     productImages.forEach((img, i) => {
+          if (data.images[i]) {
+               img.src = data.images[i];
+          } else {
+               img.style.display = 'none';
+          }
+     })
+     productImages[0].click();
+
+     // setup size buttons
+     sizeBtns.forEach(item => {
+          if (!data.sizes.includes(item.innerHTML)) {
+               item.style.display = 'none';
+          }
+     })
+
+     // setting up texts
+     const name = document.querySelector('.product-brand');
+     const shortDes = document.querySelector('.product-short-des');
+     const des = document.querySelector('.des');
+
+     title.innerHTML += name.innerHTML = data.name;
+     shortDes.innerHTML = data.shortDes;
+     des.innerHTML = data.des;
+
+     // pricing
+     const sellPrice = document.querySelector('.product-price');
+     const actualPrice = document.querySelector('.product-actual-price');
+     const discount = document.querySelector('.product-discount');
+
+     sellPrice.innerHTML = `${data.sellPrice}원`;
+     actualPrice.innerHTML = `${data.actualPrice}원`;
+     discount.innerHTML = `( ${data.discount}% 할인 )`;
+}
+
+// fetch data
+const fetchProductData = () => {
+     fetch('/get-products', {
+          method: 'post',
+          headers: new Headers({ 'Content-Type': 'application/json' }),
+          body: JSON.stringify({ id: productId })
+     })
+     .then(res => res.json())
+     .then(data => {
+          setData(data);
+          getProducts(data.tags[1]).then(data => createProductSlider(data, '.container-for-card-slider', '비슷한 상품'))
+     })
+     .catch(err => {
+          location.replace('/404');
+     })
+}
+
+let productId = null;
+if (location.pathname != '/products') {
+     productId = decodeURI(location.pathname.split('/').pop());
+     fetchProductData();
+}
