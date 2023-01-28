@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Wusinsa : 결제</title>
+
+     <link rel="stylesheet" href="css/signup.css">
+     <link rel="stylesheet" href="css/home.css">
+     <link rel="stylesheet" href="css/cart.css">
+     <link rel="stylesheet" href="css/checkout.css">
+</head>
+<body>
+
+     <nav class="navbar"></nav>
+
+     <div class="alert-box">
+          <img src="img/error.png" class="alert-img" alt="">
+          <p class="alert-msg"></p>
+     </div>
+
+     <div class="form">
+          <h1 class="heading">결제</h1>
+          <p class="text">배송지 주소</p>
+          <input type="text" id="address" placeholder="상세 주소">
+          <input type="text" id="street" placeholder="도로명">
+          <div class="three-input-container">
+               <input type="text" id="city" placeholder="시/군/도">
+               <input type="text" id="state" placeholder="도">
+               <input type="text" id="pincode" placeholder="우편번호">
+          </div>
+          <input type="text" id="landmark" placeholder="집/회사">
+     </div>
+
+     <div class="cart-section">
+          <div class="product-list">
+               <p class="section-heading">나의 장바구니</p>
+               <div class="cart">
+                    
+               </div>
+          </div>
+          <div class="checkout-section">
+               <div class="checkout-box">
+                    <p class="text">총 청구서</p>
+                    <h1 class="bill">0원</h1>
+                    <button class="place-order-btn">주문하기</button>
+               </div>
+          </div>
+     </div>
+
+     <script src="js/nav.js"></script>
+     <script src="js/home.js"></script>
+     <script src="js/cart.js"></script>
+     <script src="js/token.js"></script>
+     <script src="js/checkout.js"></script>
+</body>
+</html>

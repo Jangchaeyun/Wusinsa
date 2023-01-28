@@ -3,6 +3,7 @@ const express = require('express');
 const admin = require('firebase-admin');
 const bcrypt = require('bcrypt');
 const path = require('path');
+const nodemailer = require('nodemailer');
 
 // firebase admin setup
 let serviceAccount = require("./wusinsa-firebase-adminsdk-zi5om-345fa90dfe.json");
@@ -281,6 +282,33 @@ app.get('/cart', (req, res) => {
 
 app.get('/checkout', (req, res) => {
      res.sendFile(path.join(staticPath, "checkout.html"));
+})
+
+app.post('/order', (req, res) => {
+     const { order, email, add } = req.body;
+
+     let transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD
+          }
+     })
+
+     const mailOption = {
+          from: 'zzangsally@gmail.com',
+          to: email,
+          subject: 'Wusinsa : 주문 완료',
+          html: `
+               HTML CODE here
+          `
+     }
+          
+     let docName = email + Math.floor(Math.random() * 123719287419824);
+     db.collection('order').doc(docName).set(req.body)
+     .then(data => {
+          
+     })
 })
 
 // 404 route

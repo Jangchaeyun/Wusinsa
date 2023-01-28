@@ -1,6 +1,6 @@
 .cart-section {
      width: 100%;
-     padding: 20px 10px;
+     padding: 20px 10vw;
      display: flex;
      justify-content: space-between;
 }
@@ -138,7 +138,7 @@
      font-size: 18px;
 }
 
-.checkout-btn {
+.checkout-btn, .place-order-btn {
      display: block;
      width: 100%;
      border: none;
