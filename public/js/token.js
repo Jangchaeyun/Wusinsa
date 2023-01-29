@@ -42,29 +42,42 @@ const sendData = (path, data) => {
 
 const processData = (data) => {
      loader.style.display = null;
-     if (data.alert) {
-          showAlert(data.alert);
-     } else if (data.name) {
-          // create authToken
-          data.authToken = generateToken(data.email);
-          sessionStorage.user = JSON.stringify(data);
-          location.replace('/');
-     } else if (data == true) {
-          // seller page
-          let user = JSON.parse(sessionStorage.user);
-          user.seller = true;
-          sessionStorage.user = JSON.stringify(user);
-          location.reload();
-     } else if (data.product) {
-          location.href = '/seller';
+     if(data.alert){
+         if(data.type){
+             showAlert(data.alert, 'success');
+         } else{
+             showAlert(data.alert);
+         }
+     } else if(data.name){
+         // create authToken
+         data.authToken = generateToken(data.email);
+         sessionStorage.user = JSON.stringify(data);
+         location.replace('/');
+     } else if(data == true){
+         // seller page
+         let user = JSON.parse(sessionStorage.user);
+         user.seller = true;
+         sessionStorage.user = JSON.stringify(user);
+         location.reload();
+     } else if(data.product){
+         location.href = '/seller';
      }
 }
-
+ 
 // alert function
-const showAlert = (msg) => {
+const showAlert = (msg, type='error') => {
      let alertBox = document.querySelector('.alert-box');
      let alertMsg = document.querySelector('.alert-msg');
+     let alertImg = document.querySelector('.alert-img');
      alertMsg.innerHTML = msg;
+     if (type == 'success') {
+          alertImg.src = `img/success.png`;
+          alertMsg.style.color = `#0ab50a`;
+     } else { // means it is a error
+          alertImg.src = `img/error.png`;
+          alertMsg.style.color = null;
+     }
+
      alertBox.classList.add('show');
      setTimeout(() => {
           alertBox.classList.remove('show');

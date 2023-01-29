@@ -11,15 +11,20 @@ placeOrderBtn.addEventListener('click', () => {
      if (address) {
           fetch('/order', {
                method: 'post',
-               headers: new Headers({ 'Content-Type': 'application/json' }),
+               headers: new Headers({'Content-Type': 'application/json'}),
                body: JSON.stringify({
-                    order: JSON.parse(localStorage.cart),
-                    email: JSON.parse(sessionStorage.user).email,
-                    add: address,
+                   order: JSON.parse(localStorage.cart),
+                   email: JSON.parse(sessionStorage.user).email,
+                   add: address,
                })
           }).then(res => res.json())
           .then(data => {
-               alert(data);
+               if (data.alert = '주문 접수 완료!') {
+                    delete localStorage.cart;
+                    showAlert(data.alert, 'success');
+               } else {
+                    showAlert(data.alert);
+               }
           })
      }
 })

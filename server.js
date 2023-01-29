@@ -296,18 +296,72 @@ app.post('/order', (req, res) => {
      })
 
      const mailOption = {
-          from: 'zzangsally@gmail.com',
+          from: 'wusinsa@gmail.com',
           to: email,
-          subject: 'Wusinsa : 주문 완료',
+          subject: 'Wusinsa : Order Placed',
           html: `
-               HTML CODE here
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Document</title>
+               
+                    <style>
+                         body {
+                              min-height: 90vh;
+                              background: #f5f5f5;
+                              font-family: sans-serif;
+                              display: flex;
+                              justify-content: center;
+                              align-items: center;
+                         }
+                         .heading {
+                              text-align: center;
+                              font-size: 40px;
+                              width: 50%;
+                              display: block;
+                              line-height: 50px;
+                              margin: 30px auto 60px;
+                              text-transform: capitalize;    
+                         }
+                         .heading span {
+                              font-weight: 300;
+                         }
+                         .btn {
+                              width: 200px;
+                              height: 50px;
+                              border-radius: 5px;
+                              background: #3f3f3f;
+                              color: #fff;
+                              display: block;
+                              margin: auto;
+                              font-size: 18px;
+                              text-transform: capitalize;
+                         }
+                    </style>
+               </head>
+               <body>
+                    <div>
+                         <h1 class="heading">${email.split('@')[0]}에게, <span>주문이 성공적으로 완료되었습니다.</span></h1>
+                         <button class="btn">상태 확인</button>
+                    </div>
+               </body>
+          </html>
           `
      }
           
      let docName = email + Math.floor(Math.random() * 123719287419824);
-     db.collection('order').doc(docName).set(req.body)
+     db.collection('order').doc(docName).set(req.body) 
      .then(data => {
-          
+          transporter.sendMail(mailOption, (err, info) => {
+               if (err) {
+                    res.json({ 'alert': '이런! 오류가 발생한 것 같습니다. 다시 시도하십시오' })
+               } else {
+                    res.json({ 'alert': '주문 접수 완료!', 'type': 'success' });
+               }
+          })
      })
 })
 
